@@ -16,22 +16,32 @@ int main(int argc, char ** argv)
 
 void runCmd(char * input)
 {
+	//char argv[MAX_ARGS][MAX_LINE_LENGTH];
 	char ** argv = malloc(sizeof(char)*MAX_ARGS*MAX_LINE_LENGTH);
-
 	parseCmd(input, argv);
+	int i = 0;
 
-	execvp(argv[0], argv);
-	free(argv);	
+	fflush(stdout);
+
+	//int pid = fork();
+	//if(pid == 0)
+	//{
+		//This is the child process.
+
+		execvp(*argv, argv);
+	//free(argv);	
 }
 
 void parseCmd(char * cmd, char ** argv)
 {
-	int i = 0;
-	argv[0] = strtok(cmd, " ");
-	while(argv[i] != NULL && i < (MAX_ARGS - 1))
+	int i = 1;
+        argv[0] = strtok(cmd, " \n");
+        
+	while(argv[i-1] != NULL && i < (MAX_ARGS - 1))
 	{
 		printf("%s\n", argv[i]);
-		argv[++i] = strtok(NULL, " ");
+		argv[i] = strtok(NULL, " \n");
+                i++;
 	}
 }
 	
