@@ -16,10 +16,22 @@ int main(int argc, char ** argv)
 
 void runCmd(char * input)
 {
-	//char argv[MAX_ARGS][MAX_LINE_LENGTH];
-	char ** argv = malloc(sizeof(char)*MAX_ARGS*MAX_LINE_LENGTH);
+	char argv[MAX_ARGS][MAX_LINE_LENGTH];
+	//printf("before malloc\n");
+	//fflush(stdout);
+	//char ** argv = malloc(sizeof(char)*MAX_ARGS*MAX_LINE_LENGTH);
+	//printf("after malloc\n");
+	//fflush(stdout);
 	parseCmd(input, argv);
 	int i = 0;
+	while(argv[i] != NULL)
+	{
+		printf("2: %s\n", argv[i]);
+		fflush(stdout);
+		i++;
+	}
+
+
 
 	fflush(stdout);
 
@@ -28,18 +40,25 @@ void runCmd(char * input)
 	//{
 		//This is the child process.
 
-		execvp(*argv, argv);
+		//execvp(*argv, argv);
 	//free(argv);	
 }
 
 void parseCmd(char * cmd, char ** argv)
 {
+	//printf("in parseCmd\n");
+	//fflush(stdout);
 	int i = 1;
+	//printf("befre strtok 0\n");
+	//fflush(stdout);
         argv[0] = strtok(cmd, " \n");
+	//printf("after strtok 0\n");
+	//fflush(stdout);
         
 	while(argv[i-1] != NULL && i < (MAX_ARGS - 1))
 	{
-		printf("%s\n", argv[i]);
+		printf("%s\n", argv[i-1]);
+		fflush(stdout);
 		argv[i] = strtok(NULL, " \n");
                 i++;
 	}
