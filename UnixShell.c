@@ -8,6 +8,10 @@
 #include <errno.h>
 #include <stdlib.h>
 
+
+/*
+ *This is the main function for the program. In here it loops through a while loop parsing the input from the user.
+ */
 int main(int argc, char ** argv)
 {
 	char * promptVal = processArgs(argc, argv);
@@ -68,6 +72,9 @@ int main(int argc, char ** argv)
 	return 0;
 }
 
+/*
+ *This function is called when the user attempts to use cd. It will print error statements if the user didn't use cd correctly.
+ */
 void cd(char * argv[])
 {
 	if(argv[1] == NULL)
@@ -83,11 +90,25 @@ void cd(char * argv[])
 	}
 }
 
+
+/*
+ * This function is extremely simple. Basically just forwards the results of getcwd to the user.
+ */
 void cwd()
 {
 	printf("%s\n", getcwd(NULL, 100));
 }
 
+/*
+ *The history function is slightly complicated. It really has two functions, because it keeps tracks of the history in a 
+ *static array. I thought this would be preferable to using a global array. The max history size is defined by a constant
+ *in UnixShell.h
+ *
+ *Function 1: When argv is NULL, the history function simply adds input to the history list.
+ *
+ *Function 2: When argv is not NULL, history tries to print the command history up to -x. It will print errors if input was
+ *		incorrect.
+ */
 void history(char * argv[], char * input)
 {
 	static char previousCmds[MAX_COMMAND_HISTORY][MAX_LINE_LENGTH];
@@ -127,16 +148,25 @@ void history(char * argv[], char * input)
 		
 }
 
+/*
+ *This function is what gets called when the user wants the pid of the shell.
+ */
 void selfPid()
 {
 	printf("PID = %i\n", getpid());
 }
 
+/*
+ *This function gets called when the user wants the ppid of the shell.
+ */
 void selfPPid()
 {
 	printf("PPID = %i\n", getppid());
 }
 
+/*
+ *This function processes the status from waitpid(). It prints the status so the user can see it.
+ */
 void processStatus(pid_t childPid, int status)
 {
 	if(WIFEXITED(status))
@@ -149,6 +179,9 @@ void processStatus(pid_t childPid, int status)
 	}
 }
 
+/*
+ *runCmdBlocking creates a child process with the argv as commands, and then waits for that process to finish.
+ */
 void runCmdBlocking(char * argv[])
 {
 	pid_t pid = fork();
@@ -172,6 +205,9 @@ void runCmdBlocking(char * argv[])
 		
 }
 
+/*
+ *runCmdNoBlocking execs the command based on argv, but does not block the main process waiting for the child to finish.
+ */
 void runCmdNoBlocking(char * argv[])
 {
 	pid_t pid = fork();
@@ -185,16 +221,15 @@ void runCmdNoBlocking(char * argv[])
 	}
 }
 
+
+/*
+ *This command parses the user input into an array of strings for me. It returns the size of the array to make checking for
+ *an & character easier.
+ */
 int parseCmd(char * cmd, char * argv[])
 {
-	//printf("in parseCmd\n");
-	//fflush(stdout);
 	int i = 1;
-	//printf("befre strtok 0\n");
-	//fflush(stdout);
         argv[0] = strtok(cmd, " \n");
-	//printf("after strtok 0\n");
-	//fflush(stdout);
         
 	while(argv[i-1] != NULL && i < (MAX_ARGS - 1))
 	{
@@ -207,7 +242,9 @@ int parseCmd(char * cmd, char * argv[])
 	return i-1;
 }
 	
-
+/*
+ *This function makes use of getopt() to parse the arguments passed from the command line to my program.
+ */
 char * processArgs(int argc, char ** argv)
 {
 	int c;
