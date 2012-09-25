@@ -16,7 +16,7 @@ int main(int argc, char ** argv)
 
 void runCmd(char * input)
 {
-	char argv[MAX_ARGS][MAX_LINE_LENGTH];
+	char * argv[MAX_ARGS];
 	//printf("before malloc\n");
 	//fflush(stdout);
 	//char ** argv = malloc(sizeof(char)*MAX_ARGS*MAX_LINE_LENGTH);
@@ -44,7 +44,7 @@ void runCmd(char * input)
 	//free(argv);	
 }
 
-void parseCmd(char * cmd, char ** argv)
+void parseCmd(char * cmd, char * argv[])
 {
 	//printf("in parseCmd\n");
 	//fflush(stdout);
